@@ -6,6 +6,7 @@ import json
 import re
 import pygit2
 
+
 class Version:
     tag = None
     _exceptions = []
@@ -29,6 +30,7 @@ class Version:
             'exceptions': self._exceptions
         }
 
+
 class Package:
     name = None
     bases = []
@@ -46,7 +48,7 @@ class Package:
             self.bases = package['bases']
 
         if 'versions' in package:
-            self._versions = { x:Version(x, value) for x, value in package['versions'].iteritems() }
+            self._versions = { x: Version(x, value) for x, value in package['versions'].iteritems() }
 
     def __getitem__(self, index):
         return self._versions[index]
@@ -57,11 +59,11 @@ class Package:
         package = {
             "package": self.name,
             "bases": self.bases,
-            "versions": { tag:version.json() for tag, version in self._versions.iteritems() }
-        };
+            "versions": { tag: version.json() for tag, version in self._versions.iteritems() }
+        }
 
         with open(filename, 'w') as file:
-            json.dump(package, file, indent = 4, sort_keys = True, separators= (',', ': '))
+            json.dump(package, file, indent = 4, sort_keys = True, separators = (',', ': '))
 
     def versions(self):
         return self._versions
@@ -84,6 +86,7 @@ class Package:
 
         return [ self.name + ':' + v for v in self._versions ]
 
+
 def limited_package(full_base):
     if full_base.find('/') == -1:
         return Package(full_base)
@@ -92,6 +95,7 @@ def limited_package(full_base):
     package = Package(base)
     package.bases = [ metabase ]
     return package
+
 
 def commit_changes(package):
     repo = pygit2.Repository(pygit2.discover_repository(getcwd()))
@@ -134,10 +138,10 @@ if args.command == 'add':
     version = args.version[0]
 
     exceptions = []
-    if args.exception != None:
+    if args.exception is not None:
         exceptions = [ dict([ x.split(':') for x in exception.split('/') ]) for exception in args.exception ]
 
-    if not version in package.versions().keys():
+    if version not in package.versions().keys():
         package.add_version(version, exceptions)
     else:
         package[version].add_exceptions(exceptions)
