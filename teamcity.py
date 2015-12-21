@@ -33,3 +33,6 @@ class Session:
         response = self.api.buildQueue.post(data)
         return response
 
+    def status(self, build_id):
+        return self.api.buildQueue['id:%d' % build_id].get()
+

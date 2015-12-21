@@ -45,6 +45,6 @@ else:
     responses = []
     for version in versions:
         responses.append(session.trigger('Random_Random', { 'version': version }))
+        print session.status(responses[-1]['id'])
 
-    print responses
 
