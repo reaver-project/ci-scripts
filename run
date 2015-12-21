@@ -42,6 +42,9 @@ if 'version' in args and args.version is not None:
     command = args.command + ' ' + args.version
     subprocess.call(command, shell = True)
 else:
+    responses = []
     for version in versions:
-        session.trigger('Random_Random', { 'version': version })
+        responses.append(session.trigger('Random_Random', { 'version': version }))
+
+    print responses
 
