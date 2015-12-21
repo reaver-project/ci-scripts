@@ -19,7 +19,8 @@ class Session:
         data = {
             'buildType': {
                 'id': 'Random_Random'
-            }
+            },
+            'personal': personal
         }
 
         if properties:
