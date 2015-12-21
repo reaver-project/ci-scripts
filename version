@@ -1,141 +1,34 @@
 #!/usr/bin/env python
 
 import argparse
-from os import path, getcwd
-import json
-import re
-import pygit2
-
-
-class Version:
-    tag = None
-    _exceptions = []
-
-    def __init__(self, tag, version_description):
-        self.tag = tag
-        if 'exceptions' in version_description:
-            self._exceptions = version_description['exceptions']
-
-    def add_exceptions(self, exceptions):
-        self._exceptions += exceptions
-
-    def remove_exception(self, exception):
-        self._exceptions.remove(exception)
-
-    def exceptions(self):
-        return self._exceptions
-
-    def json(self):
-        return {
-            'exceptions': self._exceptions
-        }
-
-
-class Package:
-    name = None
-    bases = []
-
-    _versions = {}
-
-    def __init__(self, package_name):
-        self.name = package_name
-        filename = path.join('versions', package_name + '.json')
-
-        with open(filename) as file:
-            package = json.load(file)
-
-        if 'bases' in package:
-            self.bases = package['bases']
-
-        if 'versions' in package:
-            self._versions = { x: Version(x, value) for x, value in package['versions'].iteritems() }
-
-    def __getitem__(self, index):
-        return self._versions[index]
-
-    def save(self):
-        filename = path.join('versions', self.name + '.json')
-
-        package = {
-            "package": self.name,
-            "bases": self.bases,
-            "versions": { tag: version.json() for tag, version in self._versions.iteritems() }
-        }
-
-        with open(filename, 'w') as file:
-            json.dump(package, file, indent = 4, sort_keys = True, separators = (',', ': '))
-
-    def versions(self):
-        return self._versions
-
-    def add_version(self, tag, exceptions = []):
-        self._versions[tag] = Version(tag, { 'exceptions': exceptions })
-
-    def allowed_base(self, version, base):
-        patterns = [ '-'.join([ k + '-' + v for k, v in exception.iteritems() ]) for exception in self._versions[version].exceptions() ]
-        if not len(patterns):
-            return True
-
-        pattern = re.compile('(' + ')|('.join(patterns) + ')')
-        return pattern.match(base) == None
-
-    def combined_versions(self):
-        if len(self.bases):
-            all_bases = [ version for base in self.bases for version in limited_package(base).combined_versions() ]
-            return [ base + '/' + self.name + ':' + v for v in self._versions for base in all_bases if self.allowed_base(v, base) ]
-
-        return [ self.name + ':' + v for v in self._versions ]
-
-
-def limited_package(full_base):
-    if full_base.find('/') == -1:
-        return Package(full_base)
-
-    metabase, base = full_base.rsplit('/', 1)
-    package = Package(base)
-    package.bases = [ metabase ]
-    return package
-
-
-def commit_changes(package):
-    repo = pygit2.Repository(pygit2.discover_repository(getcwd()))
-
-    repo.index.add(path.join('versions', package + '.json'))
-    repo.index.write()
-    tree = repo.index.write_tree()
-
-    config = pygit2.Config.get_global_config()
-    name = list(config.get_multivar('user.name'))[0].encode('utf-8')
-    email = list(config.get_multivar('user.email'))[0].encode('utf-8')
-    author = pygit2.Signature(name, email)
-
-    repo.create_commit(
-        repo.head.name,
-        author,
-        author,
-        '[Reaver Project CI Scripts/version] Update package: ' + package + '.',
-        tree,
-        [ repo.head.peel().oid ]
-    )
+import package
 
 parser = argparse.ArgumentParser(description = 'Reaver Project CI scripts: version')
 parser.add_argument('-c', '--commit', action = 'store_true', help = 'Make a git commit after adding the version.')
 subparsers = parser.add_subparsers(dest = 'command')
 
 add_parser = subparsers.add_parser('add', help = 'Add a version to a package.')
-add_parser.add_argument('package', nargs = 1)
-add_parser.add_argument('version', nargs = 1)
+add_parser.add_argument('package')
+add_parser.add_argument('version')
 add_parser.add_argument('-e', '--exception', action = 'append', help = 'Add an exception to specified version. The format is as follows: package1:version1/package2:version2. ' +
     'The above specifies that this version is not to be built in combination with package1 in version1 and package2 in version2.\n')
 
 get_parser = subparsers.add_parser('get', help = 'Get all allowed combinations of package versions and its bases.')
-get_parser.add_argument('package', nargs = 1)
+get_parser.add_argument('package')
+
+add_built_parser = subparsers.add_parser('add-built', help = 'Add a full version that has been built. Is validated against all available versions.')
+add_built_parser.add_argument('package')
+add_built_parser.add_argument('version')
+
+get_built_parser = subparsers.add_parser('get-built', help = 'Get all versions that have been built, or all not built versions (if used with -v).')
+get_built_parser.add_argument('package')
+get_built_parser.add_argument('-v', '--inverted', action = 'store_true', help = 'Inverse the selection.')
 
 args = parser.parse_args()
 
 if args.command == 'add':
-    package = Package(args.package[0])
-    version = args.version[0]
+    package = package.Package(args.package)
+    version = args.version
 
     exceptions = []
     if args.exception is not None:
@@ -143,16 +36,45 @@ if args.command == 'add':
 
     if version not in package.versions().keys():
         package.add_version(version, exceptions)
+        message = 'Update package %s: add version %s.' % (package.name, version)
     else:
         package[version].add_exceptions(exceptions)
+        message = 'Update package %s: add exceptions to version %s.' % (package.name, version)
 
     package.save()
 
-    if args.commit:
-        commit_changes(package.name)
+elif args.command == 'get':
+    args.commit = False
 
-if args.command == 'get':
-    package = Package(args.package[0])
+    package = package.Package(args.package)
     for version in package.combined_versions():
         print version
+
+elif args.command == 'add-built':
+    package = package.Package(args.package)
+    version = args.version
+    if version not in package.combined_versions():
+        print 'Requested version: %s is not a valid version of package %s.' % (version, package.name)
+        exit(0)
+
+    package.add_built(version)
+    message = 'Update package %s: add a built version %s.' % (package.name, version)
+
+    package.save()
+
+elif args.command == 'get-built':
+    args.commit = False
+
+    package = package.Package(args.package)
+    all_versions = package.combined_versions()
+    built_versions = package.built_versions()
+
+    for version in all_versions:
+        if args.inverted and version not in built_versions:
+            print version
+        if not args.inverted and version in built_versions:
+            print version
+
+if args.commit:
+    package.commit_changes(package.name, meessage)
 

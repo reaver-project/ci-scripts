@@ -1,0 +1,18 @@
+{
+    "bases": [],
+    "package": "gcc",
+    "versions": {
+        "4_8_5": {
+            "exceptions": []
+        },
+        "4_9_3": {
+            "exceptions": []
+        },
+        "5_1_0": {
+            "exceptions": []
+        },
+        "5_2_0": {
+            "exceptions": []
+        }
+    }
+}

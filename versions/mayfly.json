@@ -1,0 +1,17 @@
+{
+    "package": "mayfly",
+    "bases": [ "gcc/boost", "llvm/boost" ],
+    "versions": {
+        "0.1.0": {
+            "exceptions": [
+                {
+                    "llvm": "37"
+                },
+                {
+                    "gcc": "5_2_0",
+                    "boost": "1.59.0"
+                }
+            ]
+        }
+    }
+}
