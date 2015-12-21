@@ -50,7 +50,7 @@ else:
     for version, build in responses.iteritems():
         status = session.status(build['id'])
         while not hasattr(status, 'status'):
-            sleep.time(1)
+            time.sleep(1)
             status = session.status(build['id'])
 
         print '##teamcity[testStarted name=\'%s\']' % version
