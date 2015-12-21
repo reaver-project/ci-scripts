@@ -46,7 +46,7 @@ else:
     responses = {}
     for version in versions:
         responses[version] = session.trigger('Random_Random',
-            properties: { 'version': version },
+            properties = { 'version': version },
             personal = True)
 
     for version, build in responses.iteritems():
