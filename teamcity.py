@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import slumber, requests
+import slumber
+import requests
+
 
 class Session:
     def __init__(self, url, user, password):
@@ -13,7 +15,7 @@ class Session:
 
         self.api = slumber.API(url, session = self.api_session, auth = self.auth)
 
-    def trigger(self, build_conf, properties = {}):
+    def trigger(self, build_conf, properties = {}, personal = False):
         data = {
             'buildType': {
                 'id': 'Random_Random'
