@@ -4,6 +4,7 @@ import argparse
 import package
 import subprocess
 import teamcity
+import time
 
 parser = argparse.ArgumentParser(description = 'Reaver Project CI scripts: configuration matrix runner')
 parser.add_argument('package', help = 'Package to use as set of arguments.')
@@ -42,9 +43,19 @@ if 'version' in args and args.version is not None:
     command = args.command + ' ' + args.version
     subprocess.call(command, shell = True)
 else:
-    responses = []
+    responses = {}
     for version in versions:
-        responses.append(session.trigger('Random_Random', { 'version': version }))
-        print session.status(responses[-1]['id'])
+        responses[version] = session.trigger('Random_Random', { 'version': version })
 
+    for version, build in responses:
+        status = session.status(build['id'])
+        while not hasattr(status, 'status'):
+            sleep.time(1)
+            status = session.status(build['id'])
+
+        print '##teamcity[testStarted name=\'%s\']' % version
+        if status['status'] != 'SUCCESS':
+            print 'See details: %s.' %
+            print '##teamcity[testFailed name=\'%s\' message=\'Downstream build failed.\']' % version
+        print '##teamcity[testFinished name=\'%s\']' % version
 
