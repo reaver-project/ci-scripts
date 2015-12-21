@@ -47,7 +47,7 @@ else:
     for version in versions:
         responses[version] = session.trigger('Random_Random', { 'version': version })
 
-    for version, build in responses:
+    for version, build in responses.iteritems():
         status = session.status(build['id'])
         while not hasattr(status, 'status'):
             sleep.time(1)
