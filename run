@@ -53,7 +53,7 @@ else:
 
     for version, build in responses.iteritems():
         status = session.status(build['id'])
-        while 'status' not in status.keys():
+        while 'finishDate' not in status.keys():
             time.sleep(1)
             status = session.status(build['id'])
 
