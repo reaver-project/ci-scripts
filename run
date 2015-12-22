@@ -60,5 +60,7 @@ else:
         print '##teamcity[testStarted name=\'%s\']' % version
         if status['status'] != 'SUCCESS':
             print '##teamcity[testFailed name=\'%s\' message=\'Downstream build failed; see details: %s.\']' % (version, build['webUrl'])
+        else:
+            print "%s: %s" % (version, status['status'])
         print '##teamcity[testFinished name=\'%s\']' % version
 
