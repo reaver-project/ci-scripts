@@ -1,6 +1,16 @@
 {
     "bases": [],
+    "built": [],
     "package": "gcc",
     "versions": {
+        "5_1_0": {
+            "exceptions": []
+        },
+        "5_2_0": {
+            "exceptions": []
+        },
+        "5_3_0": {
+            "exceptions": []
+        }
     }
 }
