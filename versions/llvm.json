@@ -2,7 +2,5 @@
     "bases": [],
     "package": "llvm",
     "versions": {
-        "37": {},
-        "36": {}
     }
 }
