@@ -9,7 +9,7 @@ import sys
 
 parser = argparse.ArgumentParser(description = 'Reaver Project CI scripts: configuration matrix runner')
 parser.add_argument('package', help = 'Package to use as set of arguments.')
-parser.add_argument('command', help = 'Command to run and to append configuration options to.')
+parser.add_argument('command', help = 'Command to run. Substitutes {} for the version.')
 
 parser.add_argument('-t', '--teamcity', required = 'true', help = 'TeamCity server to use.')
 parser.add_argument('-u', '--user', required = 'true', help = 'TeamCity user to login as.')
@@ -41,7 +41,7 @@ else:
 session = teamcity.Session(args.teamcity + '/httpAuth/app/rest', args.user, args.password)
 
 if 'version' in args and args.version is not None:
-    command = args.command + ' ' + args.version
+    command = args.command.replace('{}', args.version)
     exit(subprocess.call(command, shell = True))
 else:
     responses = {}
