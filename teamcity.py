@@ -47,5 +47,6 @@ class Session:
         return getattr(self.api.buildQueue, 'id:%d' % build_id).get()
 
     def get_change_id(self, locator):
-        return getattr(self.api.builds, ','.join(['%s:%s' % (key, str(value)) for key, value in locator.iteritems()]))
+        resource = getattr(self.api.builds, ','.join(['%s:%s' % (key, str(value)) for key, value in locator.iteritems()])).get()
+        return resource['lastChanges'][0]['id']
 
