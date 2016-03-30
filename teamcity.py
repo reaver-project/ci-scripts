@@ -35,9 +35,9 @@ class Session:
 
         if change is not None:
             data['lastChanges'] = {
-                'change': {
-                    [ 'id': change ]
-                }
+                'change': [
+                    { 'id': change }
+                ]
             }
 
         response = self.api.buildQueue.post(data)
