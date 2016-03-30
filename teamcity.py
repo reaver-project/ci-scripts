@@ -15,6 +15,9 @@ class Session:
 
         self.api = slumber.API(url, session = self.api_session, auth = self.auth)
 
+    def locator_to_string(self, locator):
+        return ','.join(['%s:%s' % (key, str(value)) for key, value in locator.iteritems()])
+
     def trigger(self, build_conf, properties = {}, personal = False, change = None):
         data = {
             'buildType': {
@@ -43,10 +46,9 @@ class Session:
         response = self.api.buildQueue.post(data)
         return response
 
-    def status(self, build_id):
-        return getattr(self.api.buildQueue, 'id:%d' % build_id).get()
-
     def get_change_id(self, locator):
-        resource = getattr(self.api.builds, ','.join(['%s:%s' % (key, str(value)) for key, value in locator.iteritems()])).get()
+        resource = getattr(self.api.builds, self.locator_to_string(locator)).get()
         return resource['lastChanges']['change'][0]['id']
 
+    def add_tag(self, locator, tag):
+        getattr(self.api.builds, self.locator_to_string(locator)).post(tag)
