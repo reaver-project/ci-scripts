@@ -44,6 +44,7 @@ session = teamcity.Session(args.teamcity + '/httpAuth/app/rest', args.user, args
 
 if 'version' in args and args.version is not None:
     command = args.command.replace('{}', args.version)
+    session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] }, args.version)
     exit(subprocess.call(command, shell = True))
 else:
     responses = {}
@@ -56,7 +57,6 @@ else:
             properties = { 'version': version },
             change = change_id,
             personal = True)
-        session.add_tag({ 'id': responses[version]['id'] }, version)
 
         print 'Started build for %s: %s.' % (version, responses[version]['webUrl'])
         sys.stdout.flush()
