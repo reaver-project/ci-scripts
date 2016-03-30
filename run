@@ -56,7 +56,7 @@ else:
             properties = { 'version': version },
             change = change_id,
             personal = True)
-        session.add_tag(responses[version]['id'], version)
+        session.add_tag({ 'id': responses[version]['id'] }, version)
 
         print 'Started build for %s: %s.' % (version, responses[version]['webUrl'])
         sys.stdout.flush()
