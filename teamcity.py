@@ -51,5 +51,5 @@ class Session:
         return resource['lastChanges']['change'][0]['id']
 
     def add_tag(self, locator, tag):
-        payload = { 'count': 1, 'tag': [ { 'name': tag } ] })
+        payload = { 'count': 1, 'tag': [ { 'name': tag } ] }
         getattr(self.api.builds, self.locator_to_string(locator)).tags.push(payload)
