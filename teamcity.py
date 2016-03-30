@@ -48,5 +48,5 @@ class Session:
 
     def get_change_id(self, locator):
         resource = getattr(self.api.builds, ','.join(['%s:%s' % (key, str(value)) for key, value in locator.iteritems()])).get()
-        return resource['lastChanges'][0]['id']
+        return resource['lastChanges']['change'][0]['id']
 
