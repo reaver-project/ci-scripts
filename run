@@ -54,8 +54,7 @@ else:
     for version in versions:
         responses[version] = session.trigger(args.id,
             properties = { 'version': version },
-            change = change_id,
-            personal = True)
+            change = change_id)
         session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] }, args.version)
 
         print 'Started build for %s: %s.' % (version, responses[version]['webUrl'])
