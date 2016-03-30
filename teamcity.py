@@ -36,7 +36,7 @@ class Session:
         if change is not None:
             data['lastChanges'] = {
                 'change': {
-                    'id': change
+                    [ 'id': change ]
                 }
             }
 
