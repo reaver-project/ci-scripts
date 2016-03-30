@@ -51,4 +51,4 @@ class Session:
         return resource['lastChanges']['change'][0]['id']
 
     def add_tag(self, locator, tag):
-        getattr(self.api.builds, self.locator_to_string(locator)).post(tag)
+        getattr(self.api.builds, self.locator_to_string(locator)).tags.post(tag)
