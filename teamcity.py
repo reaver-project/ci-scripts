@@ -52,4 +52,4 @@ class Session:
 
     def add_tag(self, locator, tag):
         payload = { 'count': 1, 'tag': [ { 'name': tag } ] }
-        getattr(self.api.builds, self.locator_to_string(locator)).tags.push(payload)
+        getattr(self.api.builds, self.locator_to_string(locator)).tags.post(payload)
