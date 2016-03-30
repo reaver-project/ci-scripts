@@ -15,7 +15,7 @@ class Session:
 
         self.api = slumber.API(url, session = self.api_session, auth = self.auth)
 
-    def trigger(self, build_conf, properties = {}, personal = False):
+    def trigger(self, build_conf, properties = {}, personal = False, change = None):
         data = {
             'buildType': {
                 'id': 'Random_Random'
@@ -33,9 +33,19 @@ class Session:
                 ]
             }
 
+        if change is not None:
+            data['lastChanges'] = {
+                'change': {
+                    'id': change
+                }
+            }
+
         response = self.api.buildQueue.post(data)
         return response
 
     def status(self, build_id):
         return getattr(self.api.buildQueue, 'id:%d' % build_id).get()
+
+    def get_change_id(self, locator):
+        return getattr(self.api.builds, ','.join(['%s:%s' % (key, str(value)) for key, value in locator.iteritems()]))
 
