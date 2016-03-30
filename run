@@ -49,6 +49,8 @@ if 'version' in args and args.version is not None:
 else:
     responses = {}
 
+    session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] }, "trigger")
+
     change_id = session.get_change_id({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] })
     print 'Internal change id to use: %d.' % change_id
 
