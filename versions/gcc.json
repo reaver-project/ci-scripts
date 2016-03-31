@@ -3,5 +3,8 @@
     "built": [],
     "package": "gcc",
     "versions": {
+        "5_1_0": {
+            "exceptions": []
+        }
     }
 }
