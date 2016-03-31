@@ -21,7 +21,7 @@ class Session:
     def trigger(self, build_conf, properties = {}, personal = False, change = None):
         data = {
             'buildType': {
-                'id': 'Random_Random'
+                'id': build_conf
             },
             'personal': personal
         }
