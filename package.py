@@ -124,6 +124,6 @@ def commit_changes(package, message):
         author,
         '[Reaver Project CI Scripts/version] ' + message,
         tree,
-        [ repo.head.peel().oid ]
+        [ repo.head.get_object().oid ]
     )
 

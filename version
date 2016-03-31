@@ -27,47 +27,47 @@ get_built_parser.add_argument('-v', '--inverted', action = 'store_true', help = 
 args = parser.parse_args()
 
 if args.command == 'add':
-    package = package.Package(args.package)
+    pkg = package.Package(args.package)
     version = args.version
 
     exceptions = []
     if args.exception is not None:
         exceptions = [ dict([ x.split(':') for x in exception.split('/') ]) for exception in args.exception ]
 
-    if version not in package.versions().keys():
-        package.add_version(version, exceptions)
-        message = 'Update package %s: add version %s.' % (package.name, version)
+    if version not in pkg.versions().keys():
+        pkg.add_version(version, exceptions)
+        message = 'Update package %s: add version %s.' % (pkg.name, version)
     else:
-        package[version].add_exceptions(exceptions)
-        message = 'Update package %s: add exceptions to version %s.' % (package.name, version)
+        pkg[version].add_exceptions(exceptions)
+        message = 'Update package %s: add exceptions to version %s.' % (pkg.name, version)
 
-    package.save()
+    pkg.save()
 
 elif args.command == 'get':
     args.commit = False
 
-    package = package.Package(args.package)
-    for version in package.combined_versions():
+    pkg = package.Package(args.package)
+    for version in pkg.combined_versions():
         print version
 
 elif args.command == 'add-built':
-    package = package.Package(args.package)
+    pkg = package.Package(args.package)
     version = args.version
-    if version not in package.combined_versions():
-        print 'Requested version: %s is not a valid version of package %s.' % (version, package.name)
-        exit(0)
+    if version not in pkg.combined_versions():
+        print 'Requested version: %s is not a valid version of package %s.' % (version, pkg.name)
+        exit(1)
 
-    package.add_built(version)
-    message = 'Update package %s: add a built version %s.' % (package.name, version)
+    pkg.add_built(version)
+    message = 'Update package %s: add a built version %s.' % (pkg.name, version)
 
-    package.save()
+    pkg.save()
 
 elif args.command == 'get-built':
     args.commit = False
 
-    package = package.Package(args.package)
-    all_versions = package.combined_versions()
-    built_versions = package.built_versions()
+    pkg = package.Package(args.package)
+    all_versions = pkg.combined_versions()
+    built_versions = pkg.built_versions()
 
     for version in all_versions:
         if args.inverted and version not in built_versions:
@@ -76,5 +76,5 @@ elif args.command == 'get-built':
             print version
 
 if args.commit:
-    package.commit_changes(package.name, meessage)
+    package.commit_changes(pkg.name, message)
 
