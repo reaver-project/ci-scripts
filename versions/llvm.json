@@ -3,5 +3,8 @@
     "built": [],
     "package": "llvm",
     "versions": {
+        "36": {
+            "exceptions": []
+        }
     }
 }
