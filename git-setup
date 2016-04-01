@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -x
+
+git config --global user.name "Reaver Project CI"
+git config --global user.email "ci@reaver-project.org"
+
+echo "Host=github.com" > ~/.ssh/config
+echo "ProxyCommand=nc -x 10.91.70.20:8889 %h %p" >> ~/.ssh/config
