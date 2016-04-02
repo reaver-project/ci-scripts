@@ -81,9 +81,10 @@ class Package:
         pattern = re.compile('(' + ')|('.join(patterns) + ')')
         return pattern.match(base) == None
 
-    def combined_versions(self):
+    def combined_versions(self, built_bases = False):
         if len(self.bases):
-            all_bases = [ version for base in self.bases for version in limited_package(base).combined_versions() ]
+            base_packages = [ limited_package(base) for base in self.bases ]
+            all_bases = [ version for base_package in base_packages for version in base_package.combined_versions() if not built_bases or version in base_package.built_versions() ]
             return [ base + '/' + self.name + ':' + v for v in self._versions for base in all_bases if self.allowed_base(v, base) ]
 
         return [ self.name + ':' + v for v in self._versions ]
