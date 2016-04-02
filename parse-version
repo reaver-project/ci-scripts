@@ -4,3 +4,7 @@ version=$1
 
 export image_name=$(echo ${version} | sed -re 's#:[^:/]*/#-#g' | sed -re 's/:[^:/]*$//')
 export image_version=$(echo ${version} | sed -re 's#/[^:/]*:#-#g' | sed -re 's/^[^:/]*://')
+
+export own_name=$(echo ${version} | sed -re 's#(.*/)*([^/:]+):.*#\2#')
+export own_version=$(echo ${version} | sed -re 's#(.*/)*[^/:]+:(.*)#\2#')
+export base_version=$(echo ${version} | sed -re 's#/?[^/]+$##')
