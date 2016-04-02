@@ -23,13 +23,14 @@ parser.add_argument('-s', '--style', default = 'solid', help = 'Style of configu
 group = parser.add_mutually_exclusive_group(required = False)
 group.add_argument('-b', '--built-only', action = 'store_true', help = 'Only run for built versions.')
 group.add_argument('-v', '--not-built-only', action = 'store_true', help = 'Only run for not built versions.')
+group.add_argument('-V', '--not-built-built-bases', action = 'store_true', help = 'Only run for not built versions that have their base versions built.')
 
 parser.add_argument('version', nargs = '?')
 
 args = parser.parse_args()
 
 package = package.Package(args.package)
-versions = package.combined_versions()
+versions = package.combined_versions(built_bases = args.not_built_built_bases)
 if args.built_only or args.not_built_only:
     versions = [ version for version in versions if (version in package.built_versions()) == args.built_only ]
 

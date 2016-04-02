@@ -23,7 +23,8 @@ add_built_parser.add_argument('version')
 
 get_built_parser = subparsers.add_parser('get-built', help = 'Get all versions that have been built, or all not built versions (if used with -v).')
 get_built_parser.add_argument('package')
-get_built_parser.add_argument('-v', '--inverted', action = 'store_true', help = 'Inverse the selection.')
+get_built_parser.add_argument('-v', '--inverted', action = 'store_true', help = 'Invert the selection.')
+get_built_parser.add_argument('-V', '--not-built-built-bases', action = 'store_true', help = 'Invert the selection and only select built bases.')
 
 args = parser.parse_args()
 
@@ -67,14 +68,12 @@ elif args.command == 'get-built':
     args.commit = False
 
     pkg = package.Package(args.package)
-    all_versions = pkg.combined_versions()
-    built_versions = pkg.built_versions()
+    versions = pkg.combined_versions(built_bases = args.not_built_built_bases)
+    inverted = args.inverted or args.not_built_built_bases
+    versions = [ version for version in versions if not (version in pkg.built_versions()) == inverted ]
 
-    for version in all_versions:
-        if args.inverted and version not in built_versions:
-            print version
-        if not args.inverted and version in built_versions:
-            print version
+    for version in versions:
+        print version
 
 if args.commit:
     package.commit_changes(pkg.name, message)
