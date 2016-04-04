@@ -37,9 +37,6 @@
     ],
     "package": "boost",
     "versions": {
-        "1.55.0": {
-            "exceptions": []
-        },
         "1.56.0": {
             "exceptions": []
         },
