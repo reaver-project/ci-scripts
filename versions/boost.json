@@ -9,6 +9,9 @@
     ],
     "package": "boost",
     "versions": {
+        "1.59.0": {
+            "exceptions": []
+        },
         "1.60.0": {
             "exceptions": []
         }
