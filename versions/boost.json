@@ -1,0 +1,13 @@
+{
+    "bases": [
+        "gcc",
+        "llvm"
+    ],
+    "built": [],
+    "package": "boost",
+    "versions": {
+        "1.60.0": {
+            "exceptions": []
+        }
+    }
+}
