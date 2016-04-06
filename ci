@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -xe
+
+if [[ $# -ne 2 ]]
+then
+    echo "Wrong number of arguments."
+    echo "Usage: ./ci <base image> <path to checkout>"
+    exit 1
+fi
+
+exit_code=0
+
+base_image=$1
+path=$2
+
+template=ci.docker
+dockerfile=${template}-$$
+image_name=reaver-project-docker-run-test-$$
+
+base_image="$base_image" path="$path" envsubst < $template > $dockerfile
+
+docker build --pull -f "$dockerfile" -t "$image_name" .
+
+docker run --rm -e http_proxy="${http_proxy}" -e https_proxy="${https_proxy}" -e no_proxy="${no_proxy}" "$image_name" bash -c '
+set -xe
+
+cd /work
+./ci
+' || exit_code=$?
+
+docker rmi "$image_name"
+rm "$dockerfile"
+exit $exit_code

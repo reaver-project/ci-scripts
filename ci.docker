@@ -1,0 +1,8 @@
+FROM ${base_image}
+MAINTAINER Michał 'Griwes' Dominiak <griwes@griwes.info>
+
+RUN apt-get update && apt-get install -y wget unzip && apt-get clean
+
+COPY ./${path} /work
+
+CMD bash
