@@ -1,7 +1,10 @@
 FROM ${base_image}
 MAINTAINER Michał 'Griwes' Dominiak <griwes@griwes.info>
 
-RUN apt-get update && apt-get install -y wget unzip && apt-get clean
+ARG http_proxy=
+ARG https_proxy=
+
+RUN export http_proxy=${http_proxy}; export https_proxy=${https_proxy}; apt-get update && apt-get install -y wget unzip && apt-get clean
 
 COPY ./${path} /work
 

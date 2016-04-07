@@ -20,7 +20,7 @@ image_name=reaver-project-docker-run-test-$$
 
 base_image="$base_image" path="$path" envsubst < $template > $dockerfile
 
-docker build --pull -f "$dockerfile" -t "$image_name" .
+docker build --pull -f "$dockerfile" --build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} -t "$image_name" .
 
 docker run --rm -e http_proxy="${http_proxy}" -e https_proxy="${https_proxy}" -e no_proxy="${no_proxy}" "$image_name" bash -c '
 set -xe
