@@ -18,13 +18,16 @@ class Session:
     def locator_to_string(self, locator):
         return ','.join(['%s:%s' % (key, str(value)) for key, value in locator.iteritems()])
 
-    def trigger(self, build_conf, properties = {}, personal = False, change = None):
+    def trigger(self, build_conf, properties = {}, personal = False, change = None, branch = None):
         data = {
             'buildType': {
                 'id': build_conf
             },
             'personal': personal
         }
+
+        if branch:
+            data['branchName'] = branch
 
         if properties:
             data['properties'] = {

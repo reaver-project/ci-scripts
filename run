@@ -20,6 +20,8 @@ parser.add_argument('-i', '--id', required = 'true', help = 'ID of the build con
 parser.add_argument('-c', '--commitish', help = 'The value for "commitish" argument of the invoked job.')
 parser.add_argument('-s', '--style', default = 'solid', help = 'Style of configuration argument passing. Currently supported: "solid".')
 
+parser.add_argument('-B', '--branch', required = false, help = 'Logical branch to use.')
+
 group = parser.add_mutually_exclusive_group(required = False)
 group.add_argument('-b', '--built-only', action = 'store_true', help = 'Only run for built versions.')
 group.add_argument('-v', '--not-built-only', action = 'store_true', help = 'Only run for not built versions.')
@@ -58,7 +60,8 @@ else:
     for version in versions:
         responses[version] = session.trigger(args.id,
             properties = { 'version': version },
-            change = change_id)
+            change = change_id,
+            branch = args.branch)
 
         print 'Started build for %s: %s.' % (version, responses[version]['webUrl'])
         sys.stdout.flush()
