@@ -16,7 +16,7 @@ path=$2
 
 template=ci.docker
 dockerfile=${template}-$$
-image_name=reaver-project-docker-run-test-$$
+image_name=reaver-project-docker-run-ci-$$
 
 base_image="$base_image" path="$path" envsubst < $template > $dockerfile
 
