@@ -20,7 +20,7 @@ parser.add_argument('-i', '--id', required = 'true', help = 'ID of the build con
 parser.add_argument('-c', '--commitish', help = 'The value for "commitish" argument of the invoked job.')
 parser.add_argument('-s', '--style', default = 'solid', help = 'Style of configuration argument passing. Currently supported: "solid".')
 
-parser.add_argument('-B', '--branch', required = false, help = 'Logical branch to use.')
+parser.add_argument('-B', '--branch', required = False, help = 'Logical branch to use.')
 
 group = parser.add_mutually_exclusive_group(required = False)
 group.add_argument('-b', '--built-only', action = 'store_true', help = 'Only run for built versions.')
