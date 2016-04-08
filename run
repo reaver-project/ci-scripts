@@ -4,6 +4,7 @@ import argparse
 import package
 import subprocess
 import teamcity
+import github
 import time
 import sys
 import os
@@ -17,10 +18,16 @@ parser.add_argument('-u', '--user', required = 'true', help = 'TeamCity user to 
 parser.add_argument('-p', '--password', required = 'true', help = 'Password for the selected user.')
 parser.add_argument('-i', '--id', required = 'true', help = 'ID of the build configuration to trigger.')
 
-parser.add_argument('-c', '--commitish', help = 'The value for "commitish" argument of the invoked job.')
 parser.add_argument('-s', '--style', default = 'solid', help = 'Style of configuration argument passing. Currently supported: "solid".')
 
 parser.add_argument('-B', '--branch', required = False, help = 'Logical branch to use.')
+
+parser.add_argument('-G', '--github', action = 'store_true', help = 'Enable Github statuses.')
+parser.add_argument('-O', '--github-owner', help = 'Target github repository owner.')
+parser.add_argument('-R', '--github-repo', help = 'Target github repository name.')
+parser.add_argument('-C', '--github-commit-sha', help = 'The commit hash.')
+parser.add_argument('-U', '--github-user', help = 'Github API user.')
+parser.add_argument('-P', '--github-password', help = 'Github API password.')
 
 group = parser.add_mutually_exclusive_group(required = False)
 group.add_argument('-b', '--built-only', action = 'store_true', help = 'Only run for built versions.')
@@ -30,6 +37,9 @@ group.add_argument('-V', '--not-built-built-bases', action = 'store_true', help 
 parser.add_argument('version', nargs = '?')
 
 args = parser.parse_args()
+
+if args.github and not (args.github_owner and args.github_repo and args.github_commit_sha and args.github_user and args.github_password):
+    parser.error('Github options enabled, but not specified.')
 
 package = package.Package(args.package)
 versions = package.combined_versions(built_bases = args.not_built_built_bases)
@@ -44,6 +54,7 @@ else:
     exit(1)
 
 session = teamcity.Session(args.teamcity + '/httpAuth/app/rest', args.user, args.password)
+ghsession = github.Session('https://api.github.com/', args.gh_user, args.gh_token)
 
 if 'version' in args and args.version is not None:
     command = args.command.replace('{}', args.version)
@@ -65,3 +76,11 @@ else:
 
         print 'Started build for %s: %s.' % (version, responses[version]['webUrl'])
         sys.stdout.flush()
+
+        if args.github:
+            ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
+                'state': 'pending',
+                'target_url': responses[version]['webUrl'],
+                'description': 'Job queued.',
+                'context': 'ci/%s' % version
+            })
