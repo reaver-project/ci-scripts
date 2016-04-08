@@ -12,7 +12,7 @@ class Session:
 
         self.auth = requests.auth.HTTPBasicAuth(user, token)
 
-        self.api = slumber.API(url, session = self.api_session, auth = self.auth)
+        self.api = slumber.API(url, session = self.api_session, auth = self.auth, append_slash = False)
 
     def set_status(self, owner, repo, sha, params):
         self.api.repos(owner)(repo).statuses(sha).post(params)
