@@ -7,7 +7,7 @@ import requests
 
 class Session:
     def __init__(self, url, user, token):
-        self.api.session = requests.session()
+        self.api_session = requests.session()
         self.api_session.headers['Accept'] = 'application/vnd.github.v3+json'
 
         self.auth = requests.auth.HTTPBasicAuth(user, token)
