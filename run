@@ -27,7 +27,7 @@ parser.add_argument('-O', '--github-owner', help = 'Target github repository own
 parser.add_argument('-R', '--github-repo', help = 'Target github repository name.')
 parser.add_argument('-C', '--github-commit-sha', help = 'The commit hash.')
 parser.add_argument('-U', '--github-user', help = 'Github API user.')
-parser.add_argument('-P', '--github-password', help = 'Github API password.')
+parser.add_argument('-P', '--github-token', help = 'Github API token.')
 
 group = parser.add_mutually_exclusive_group(required = False)
 group.add_argument('-b', '--built-only', action = 'store_true', help = 'Only run for built versions.')
@@ -54,7 +54,7 @@ else:
     exit(1)
 
 session = teamcity.Session(args.teamcity + '/httpAuth/app/rest', args.user, args.password)
-ghsession = github.Session('https://api.github.com/', args.gh_user, args.gh_token)
+ghsession = github.Session('https://api.github.com/', args.github_user, args.github_token)
 
 if 'version' in args and args.version is not None:
     command = args.command.replace('{}', args.version)
