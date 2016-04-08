@@ -38,7 +38,7 @@ parser.add_argument('version', nargs = '?')
 
 args = parser.parse_args()
 
-if args.github and not (args.github_owner and args.github_repo and args.github_commit_sha and args.github_user and args.github_password):
+if args.github and not (args.github_owner and args.github_repo and args.github_commit_sha and args.github_user and args.github_token):
     parser.error('Github options enabled, but not specified.')
 
 package = package.Package(args.package)
