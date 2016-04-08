@@ -53,6 +53,10 @@ class Session:
         resource = getattr(self.api.builds, self.locator_to_string(locator)).get()
         return resource['lastChanges']['change'][0]['id']
 
+    def get_change_id(self, locator):
+        resource = getattr(self.api.builds, self.locator_to_string(locator)).get()
+        return resource['webUrl']
+
     def add_tag(self, locator, tag):
         payload = { 'count': 1, 'tag': [ { 'name': tag } ] }
         getattr(self.api.builds, self.locator_to_string(locator)).tags.post(payload)

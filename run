@@ -57,9 +57,29 @@ session = teamcity.Session(args.teamcity + '/httpAuth/app/rest', args.user, args
 ghsession = github.Session('https://api.github.com/', args.github_user, args.github_token)
 
 if 'version' in args and args.version is not None:
+    current_url = session.get_url({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] })
+    if args.github:
+        ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
+            'state': 'pending',
+            'target_url': current_url,
+            'description': 'Job started.',
+            'context': 'ci/%s' % args.version
+        })
+
     command = args.command.replace('{}', args.version)
     session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] }, args.version)
-    exit(subprocess.call('/usr/bin/env bash -c \'' + command + '\'', shell = True))
+    exit_code = subprocess.call('/usr/bin/env bash -c \'' + command + '\'', shell = True)
+
+    if args.github:
+        state = 'success' if exit_code == 0 else 'failure'
+
+        ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
+            'state': state,
+            'target_url': current_url,
+            'context': 'ci/%s' % args.version
+        })
+
+    exit(exit_code)
 else:
     responses = {}
 
