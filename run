@@ -57,7 +57,7 @@ session = teamcity.Session(args.teamcity + '/httpAuth/app/rest', args.user, args
 ghsession = github.Session('https://api.github.com/', args.github_user, args.github_token)
 
 if 'version' in args and args.version is not None:
-    current_url = session.get_url({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] })
+    current_url = '%s&guest=1' % session.get_url({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] })
     if args.github:
         ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
             'state': 'pending',
@@ -100,7 +100,7 @@ else:
         if args.github:
             ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
                 'state': 'pending',
-                'target_url': responses[version]['webUrl'],
+                'target_url': '%s&guest=1' % responses[version]['webUrl'],
                 'description': 'Job queued.',
                 'context': 'ci/%s' % version
             })
