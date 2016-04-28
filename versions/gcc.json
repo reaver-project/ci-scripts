@@ -1,9 +1,6 @@
 {
     "bases": [],
     "built": [
-        "gcc:5_1_0",
-        "gcc:5_2_0",
-        "gcc:5_3_0"
     ],
     "package": "gcc",
     "versions": {
