@@ -25,6 +25,8 @@ docker build --pull -f "$dockerfile" --build-arg http_proxy=${http_proxy} --buil
 docker run --rm -e http_proxy="${http_proxy}" -e https_proxy="${https_proxy}" -e no_proxy="${no_proxy}" "$image_name" bash -c '
 set -xe
 
+export LD_LIBRARY_PATH=/usr/lib64:${LD_LIBRARY_PATH}
+
 cd /work
 ./ci
 ' || exit_code=$?
