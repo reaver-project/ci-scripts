@@ -29,6 +29,8 @@ parser.add_argument('-C', '--github-commit-sha', help = 'The commit hash.')
 parser.add_argument('-U', '--github-user', help = 'Github API user.')
 parser.add_argument('-P', '--github-token', help = 'Github API token.')
 
+parser.add_argument('-M', '--mr', action = 'store_true', help = 'Treat the commit as an MR head and set commit status instead of adding a comment on the commit.')
+
 group = parser.add_mutually_exclusive_group(required = False)
 group.add_argument('-b', '--built-only', action = 'store_true', help = 'Only run for built versions.')
 group.add_argument('-v', '--not-built-only', action = 'store_true', help = 'Only run for not built versions.')
@@ -58,7 +60,7 @@ ghsession = github.Session('https://api.github.com/', args.github_user, args.git
 
 if 'version' in args and args.version is not None:
     current_url = '%s&guest=1' % session.get_url({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] })
-    if args.github:
+    if args.github and args.mr:
         ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
             'state': 'pending',
             'target_url': current_url,
@@ -70,14 +72,18 @@ if 'version' in args and args.version is not None:
     session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] }, args.version)
     exit_code = subprocess.call('/usr/bin/env bash -c \'' + command + '\'', shell = True)
 
-    if args.github:
-        state = 'success' if exit_code == 0 else 'failure'
+    if args.github
+        if args.mr:
+            state = 'success' if exit_code == 0 else 'failure'
 
-        ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
-            'state': state,
-            'target_url': current_url,
-            'context': 'ci/%s' % args.version
-        })
+            ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
+                'state': state,
+                'target_url': current_url,
+                'context': 'ci/%s' % args.version
+            })
+        elif exit_code != 0:
+            ghsession.add_comment(args.github_owner, args.github_repo, args.github_commit_sha,
+                'CI job has failed for environment %s: %s.' % (args.version, current_url))
 
     exit(exit_code)
 else:
@@ -97,7 +103,7 @@ else:
         print 'Started build for %s: %s.' % (version, responses[version]['webUrl'])
         sys.stdout.flush()
 
-        if args.github:
+        if args.github and args.mr:
             ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
                 'state': 'pending',
                 'target_url': '%s&guest=1' % responses[version]['webUrl'],

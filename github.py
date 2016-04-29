@@ -16,3 +16,6 @@ class Session:
 
     def set_status(self, owner, repo, sha, params):
         self.api.repos(owner)(repo).statuses(sha).post(params)
+
+    def add_comment(self, owner, repo, sha, content):
+        self.api.repos(owner)(repo).commits(sha).comments.post({ 'body': content })
