@@ -72,7 +72,7 @@ if 'version' in args and args.version is not None:
     session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] }, args.version)
     exit_code = subprocess.call('/usr/bin/env bash -c \'' + command + '\'', shell = True)
 
-    if args.github
+    if args.github:
         if args.mr:
             state = 'success' if exit_code == 0 else 'failure'
 
