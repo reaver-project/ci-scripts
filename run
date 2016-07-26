@@ -83,7 +83,7 @@ if 'version' in args and args.version is not None:
             })
         elif exit_code != 0:
             ghsession.add_comment(args.github_owner, args.github_repo, args.github_commit_sha,
-                'CI job has failed for environment %s: %s.' % (args.version, current_url))
+                'CI job has failed for environment `%s`: %s.' % (args.version, current_url))
 
     exit(exit_code)
 else:
