@@ -69,7 +69,7 @@ if 'version' in args and args.version is not None:
         })
 
     command = args.command.replace('{}', args.version)
-    session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] }, args.version)
+    session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'], 'branch': '(default:any)' }, args.version)
     exit_code = subprocess.call('/usr/bin/env bash -c \'' + command + '\'', shell = True)
 
     if args.github:
@@ -89,9 +89,9 @@ if 'version' in args and args.version is not None:
 else:
     responses = {}
 
-    session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] }, "trigger")
+    session.add_tag({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'], 'branch': '(default:any)' }, "trigger")
 
-    change_id = session.get_change_id({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'] })
+    change_id = session.get_change_id({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'], 'branch': '(default:any)' })
     print 'Internal change id to use: %d.' % change_id
 
     for version in versions:
