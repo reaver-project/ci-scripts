@@ -103,7 +103,7 @@ else:
         print 'Started build for %s: %s.' % (version, responses[version]['webUrl'])
         sys.stdout.flush()
 
-        if args.github and args.mr:
+        if args.github:
             ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
                 'state': 'pending',
                 'target_url': '%s&guest=1' % responses[version]['webUrl'],
