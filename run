@@ -60,7 +60,7 @@ ghsession = github.Session('https://api.github.com/', args.github_user, args.git
 
 if 'version' in args and args.version is not None:
     current_url = '%s&guest=1' % session.get_url({ 'buildType': args.id, 'number': os.environ['BUILD_NUMBER'], 'branch': '(default:any)', 'running': 'any' })
-    if args.github and args.mr:
+    if args.github:
         ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
             'state': 'pending',
             'target_url': current_url,
@@ -73,15 +73,15 @@ if 'version' in args and args.version is not None:
     exit_code = subprocess.call('/usr/bin/env bash -c \'' + command + '\'', shell = True)
 
     if args.github:
-        if args.mr:
-            state = 'success' if exit_code == 0 else 'failure'
+        state = 'success' if exit_code == 0 else 'failure'
 
-            ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
-                'state': state,
-                'target_url': current_url,
-                'context': 'ci/%s' % args.version
-            })
-        elif exit_code != 0:
+        ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
+            'state': state,
+            'target_url': current_url,
+            'context': 'ci/%s' % args.version
+        })
+
+        if not args.mr and exit_code != 0:
             ghsession.add_comment(args.github_owner, args.github_repo, args.github_commit_sha,
                 'CI job has failed for environment `%s`: %s.' % (args.version, current_url))
 
