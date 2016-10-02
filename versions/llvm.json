@@ -1,18 +1,10 @@
 {
     "bases": [],
     "built": [
-        "llvm:38",
-        "llvm:37",
         "llvm:39"
     ],
     "package": "llvm",
     "versions": {
-        "37": {
-            "exceptions": []
-        },
-        "38": {
-            "exceptions": []
-        },
         "39": {
             "exceptions": []
         }
