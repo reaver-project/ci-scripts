@@ -11,6 +11,9 @@
     "versions": {
         "1.61.0": {
             "exceptions": []
+        },
+        "1.62.0": {
+            "exceptions": []
         }
     }
 }
