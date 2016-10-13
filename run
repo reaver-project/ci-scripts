@@ -64,7 +64,7 @@ if 'version' in args and args.version is not None:
         ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
             'state': 'pending',
             'target_url': current_url,
-            'description': 'Job started.',
+            'description': 'Job started (branch: %s, environment: %s).' % (args.branch or "default", args.version),
             'context': 'ci/%s' % args.version
         })
 
@@ -78,6 +78,7 @@ if 'version' in args and args.version is not None:
         ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
             'state': state,
             'target_url': current_url,
+            'description': 'Job succeeded (branch: %s, environment: %s).' % (args.branch or "default", args.version),
             'context': 'ci/%s' % args.version
         })
 
@@ -107,6 +108,6 @@ else:
             ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
                 'state': 'pending',
                 'target_url': '%s&guest=1' % responses[version]['webUrl'],
-                'description': 'Job queued.',
+                'description': 'Job succeeded (branch: %s, environment: %s).' % (args.branch or "default", version),
                 'context': 'ci/%s' % version
             })
