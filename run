@@ -78,7 +78,7 @@ if 'version' in args and args.version is not None:
         ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
             'state': state,
             'target_url': current_url,
-            'description': 'Job succeeded (branch: %s, environment: %s).' % (args.branch or "default", args.version),
+            'description': 'Job %s (branch: %s, environment: %s).' % (state, args.branch or "default", args.version),
             'context': 'ci/%s' % args.version
         })
 
