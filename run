@@ -108,6 +108,6 @@ else:
             ghsession.set_status(args.github_owner, args.github_repo, args.github_commit_sha, {
                 'state': 'pending',
                 'target_url': '%s&guest=1' % responses[version]['webUrl'],
-                'description': 'Job succeeded (branch: %s, environment: %s).' % (args.branch or "default", version),
+                'description': 'Job queued (branch: %s, environment: %s).' % (args.branch or "default", version),
                 'context': 'ci/%s' % version
             })
