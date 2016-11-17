@@ -1,7 +1,6 @@
 {
     "bases": [],
     "built": [
-        "gcc:6_2_0"
     ],
     "package": "gcc",
     "versions": {
