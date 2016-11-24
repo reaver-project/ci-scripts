@@ -6,7 +6,8 @@
     "built": [
         "llvm:39/boost:1.62.0",
         "llvm:39/boost:1.61.0",
-        "gcc:6_2_0/boost:1.62.0"
+        "gcc:6_2_0/boost:1.62.0",
+        "gcc:6_2_0/boost:1.61.0"
     ],
     "package": "boost",
     "versions": {
