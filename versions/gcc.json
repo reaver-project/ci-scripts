@@ -7,6 +7,9 @@
     "versions": {
         "6_2_0": {
             "exceptions": []
+        },
+        "6_3_0": {
+            "exceptions": []
         }
     }
 }
