@@ -7,6 +7,9 @@
     "versions": {
         "39": {
             "exceptions": []
+        },
+        "40": {
+            "exceptions": []
         }
     }
 }
