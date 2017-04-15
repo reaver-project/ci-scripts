@@ -10,6 +10,7 @@ class Session:
         self.api_session = requests.session()
         self.api_session.headers['Accept'] = 'application/json'
         self.api_session.headers['Content-Type'] = 'application/json'
+        self.api_session.headers['Origin'] = url
 
         self.auth = requests.auth.HTTPBasicAuth(user, password)
 
