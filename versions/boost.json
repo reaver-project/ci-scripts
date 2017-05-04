@@ -14,7 +14,8 @@
         "llvm:40/boost:1.63.0",
         "llvm:40/boost:1.61.0",
         "gcc:7_1_0/boost:1.62.0",
-        "gcc:7_1_0/boost:1.63.0"
+        "gcc:7_1_0/boost:1.63.0",
+        "gcc:7_1_0/boost:1.61.0"
     ],
     "package": "boost",
     "versions": {
