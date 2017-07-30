@@ -4,7 +4,7 @@
     ],
     "package": "gcc",
     "versions": {
-        "6_3_0": {
+        "6_4_0": {
             "exceptions": []
         }
     }
