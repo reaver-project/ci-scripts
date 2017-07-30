@@ -4,7 +4,8 @@
         "llvm"
     ],
     "built": [
-        "llvm:39/boost:1.62.0"
+        "llvm:39/boost:1.62.0",
+        "llvm:39/boost:1.63.0"
     ],
     "package": "boost",
     "versions": {
