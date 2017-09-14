@@ -74,7 +74,7 @@ class Package:
         self._versions[tag] = Version(tag, { 'exceptions': exceptions })
 
     def allowed_base(self, version, base):
-        patterns = [ '-'.join([ k + '-' + v for k, v in exception.iteritems() ]) for exception in self._versions[version].exceptions() ]
+        patterns = [ '-'.join([ k + ':' + v for k, v in exception.iteritems() ]) for exception in self._versions[version].exceptions() ]
         if not len(patterns):
             return True
 
