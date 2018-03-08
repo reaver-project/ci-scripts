@@ -8,7 +8,8 @@
         "gcc:7_3_0/boost:1.65.0",
         "gcc:7_3_0/boost:1.64.0",
         "gcc:7_3_0/boost:1.66.0",
-        "llvm:50/boost:1.66.0"
+        "llvm:50/boost:1.66.0",
+        "llvm:60/boost:1.65.0"
     ],
     "package": "boost",
     "versions": {
