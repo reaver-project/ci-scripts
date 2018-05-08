@@ -1,8 +1,6 @@
 {
     "bases": [],
     "built": [
-        "llvm:60",
-        "llvm:50"
     ],
     "package": "llvm",
     "versions": {
