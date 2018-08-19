@@ -4,6 +4,7 @@
         "llvm"
     ],
     "built": [
+        "gcc:8_2_0/boost:1.67.0"
     ],
     "package": "boost",
     "versions": {
