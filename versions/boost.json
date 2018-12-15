@@ -30,12 +30,19 @@
             "exceptions": []
         },
         "1.66.0": {
-            "exceptions": [ { "llvm": "70" } ]
+            "exceptions": [
+                {
+                    "llvm": "70"
+                }
+            ]
         },
         "1.67.0": {
             "exceptions": []
         },
         "1.68.0": {
+            "exceptions": []
+        },
+        "1.69.0": {
             "exceptions": []
         }
     }
