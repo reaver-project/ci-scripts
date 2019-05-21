@@ -1,14 +1,13 @@
 {
     "bases": [],
     "built": [
-        "gcc:8_2_0"
     ],
     "package": "gcc",
     "versions": {
         "7_4_0": {
             "exceptions": []
         },
-        "8_2_0": {
+        "8_3_0": {
             "exceptions": []
         }
     }
