@@ -1,19 +1,16 @@
 {
     "bases": [],
     "built": [
-        "llvm:60",
-        "llvm:50",
-        "llvm:70"
     ],
     "package": "llvm",
     "versions": {
-        "50": {
-            "exceptions": []
-        },
-        "60": {
-            "exceptions": []
-        },
         "70": {
+            "exceptions": []
+        },
+        "90": {
+            "exceptions": []
+        },
+        "100": {
             "exceptions": []
         }
     }

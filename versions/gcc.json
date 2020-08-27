@@ -6,10 +6,13 @@
     ],
     "package": "gcc",
     "versions": {
-        "7_4_0": {
+        "8_3_0": {
             "exceptions": []
         },
-        "8_3_0": {
+        "9_3_0": {
+            "exceptions": []
+        },
+        "10_2_0": {
             "exceptions": []
         }
     }
