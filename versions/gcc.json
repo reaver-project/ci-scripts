@@ -4,12 +4,6 @@
     ],
     "package": "gcc",
     "versions": {
-        "8.3.0": {
-            "exceptions": []
-        },
-        "9.3.0": {
-            "exceptions": []
-        },
         "10.2.0": {
             "exceptions": []
         }
