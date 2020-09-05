@@ -4,13 +4,13 @@
     ],
     "package": "llvm",
     "versions": {
-        "70": {
+        "7.1.0": {
             "exceptions": []
         },
-        "90": {
+        "9.0.1": {
             "exceptions": []
         },
-        "100": {
+        "10.0.1": {
             "exceptions": []
         }
     }
